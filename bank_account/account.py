@@ -7,6 +7,9 @@
 class Account:
     numCreated = 0
 
+    # use __init__() function to assign values to object properties or other operations that are necessary to do when
+    # the object is being created. Here __init__() assigns values for initial_amount, nickname, firstname, middlename,
+    # lastname, age and account_type
     def __init__(self, nickname, account_type, initial_amount, firstname, middlename, lastname, age):
         self._balance = initial_amount
         self.nick_name = nickname
@@ -17,6 +20,7 @@ class Account:
         self.account = account_type
         Account.numCreated += 1
 
+    # example of encapsulation - _balance has one underscore and is therefore protected
     def deposit(self, amount):
         self._balance += amount
 
@@ -33,6 +37,7 @@ class Account:
     def get_middlename(self):
         return self.middle_name
 
+    # example of encapsulation - __last_name has two underscores and is therefore private
     def get_lastname(self):
         return self.__last_name
 
