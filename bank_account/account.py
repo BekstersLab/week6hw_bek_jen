@@ -10,7 +10,7 @@ class Account:
     # use __init__() function to assign values to object properties or other operations that are necessary to do when
     # the object is being created. Here __init__() assigns values for initial_amount, nickname, firstname, middlename,
     # lastname, age and account_type
-    def __init__(self, nickname, account_type, initial_amount, firstname, middlename, lastname, age):
+    def __init__(self, nickname, account_type, account_number, initial_amount, firstname, middlename, lastname, age):
         self._balance = initial_amount
         self.nick_name = nickname
         self.first_name = firstname
@@ -18,6 +18,7 @@ class Account:
         self.__last_name = lastname
         self.age = age
         self.account = account_type
+        self.account_number = account_number
         Account.numCreated += 1
 
     # example of encapsulation - _balance has one underscore and is therefore protected
@@ -53,12 +54,17 @@ class Account:
     def get_account_type(self):
         return self.account
 
+    def get_account_number(self):
+        return self.account_number
+
+
     # MAGIC METHOD
     # __str__ is a special method that returns a string representation of an object. It is called by the print() function
     def __str__(self):
         return (f"Account"
                 f"\nNickname: {self.get_nickname()}"
                 f"\nAccount Type: {self.get_account_type()}"
+                f"\nAccount Number: {self.get_account_number()}"
                 f"\nFirstname: {self.get_firstname()}"
                 f"\nMiddlename: {self.get_middlename()}"
                 f"\nLastname: {self.get_lastname()}"

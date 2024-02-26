@@ -4,20 +4,23 @@ from account import Account
 # creation of objects (eg. lisa_account) which are instances of the Account class for various characters
 # instantiation involves calling the constructor of the class
 
-lisa_account = Account('Lisa', 'Savings', 100, 'Lisa', 'Marie', 'Simpson', 8)
+lisa_account = Account('Lisa', 'Savings', 19740845, 100,'Lisa', 'Marie', 'Simpson', 8)
 print(lisa_account)
 
-bart_account = Account('Bart', 'Savings', 20, 'Bartholomew', 'JoJo', 'Simpson', 10)
+bart_account = Account('Bart', 'Savings', 34866290,20, 'Bartholomew', 'JoJo', 'Simpson', 10)
 print(bart_account)
 
-maggie_account = Account('Maggie', 'Savings', 10, 'Margaret', 'Evelyn', 'Simpson', 1)
+maggie_account = Account('Maggie', 'Savings', 73408236,10, 'Margaret', 'Evelyn', 'Simpson', 1)
 print(maggie_account)
 
-homer_account = Account('Homer', 'Current', '2550', 'Homer', 'Jay', 'Simpson', 36)
+homer_account = Account('Homer', 'Current', 75297806,2550, 'Homer', 'Jay', 'Simpson', 36)
 print(homer_account)
 
-marge_account = Account('Marge', 'Current', '850', 'Marjorie', 'Jacqueline', 'Simpson', 34)
+marge_account = Account('Marge', 'Current', 65886439,850, 'Marjorie', 'Jacqueline', 'Simpson', 34)
 print(marge_account)
+
+bob_account = Account('Sideshow Bob', 'current', 87640897,200, 'Robert', 'Underdunk', 'Terwilliger', 35)
+print(bob_account)
 
 # METHOD CALLS
 # operations on objects (eg. lisa_account) such as get_balance(), get_firstname() etc demonstrate method calls that
@@ -71,4 +74,6 @@ print(f"Bart's middle name is {bart_account.get_middlename()} and he is {bart_ac
 # Create 'SavingsAccount' class that inherits from Account - could be used to apply interest to savings account only?
 
 # Polymorphism?
+
+
 
