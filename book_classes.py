@@ -12,19 +12,22 @@ class Book:
     # self refers to the current instance of the class
     # self is used to access variables and methods associated with the current instance
     def __init__(self, title, author, genre):
-        # accessing the main_title attribute of the current instance of the class
+        # accessing the book_title attribute of the current instance of the class
+        # adding an _ means it id 'protected'
+        # It cannot be directly assigned a value, it has to be through a method or subclasses
         self._book_title = title
         self._author_name = author
         self._which_genre = genre
-        self.start_date = None
-        self.end_date = None
+        self._start_date = None
+        self._end_date = None
         self._read_length = None
+        # dunderscore means this is 'private' and should only be accessed within the super class
         self.__info = None
         # accessing the instance_count variable of the Book class and adding 1 to its value
         Book.instance_count += 1
 
     # Encapsulation - __info variable cannot be directly assigned new values outside of this class
-    # Protects the __info attribute from changing
+    # Protects the __info attribute from changing, but values can be accessed.
     def get_info(self):
         __info = {'Title': self._book_title, 'Author': self._author_name, 'Genre': self._which_genre}
         return __info
@@ -32,31 +35,33 @@ class Book:
     def set_start_date(self, day=None, month=None, year=None):
         if None in [day, month, year]:
             current_date = datetime.now()
-            self.start_date = str(current_date.date()).split('-')
-            self.start_date = [int(self.start_date[2]), int(self.start_date[1]), int(self.start_date[0])]
+            self._start_date = str(current_date.date()).split('-')
+            self._start_date = [int(self._start_date[2]), int(self._start_date[1]), int(self._start_date[0])]
         else:
-            self.start_date = [day, month, year]
+            self._start_date = [day, month, year]
 
     def get_start_date(self):
 
-        return self.start_date
+        return self._start_date
 
     def set_end_date(self, day=None, month=None, year=None):
         if None in [day, month, year]:
             current_date = datetime.now()
-            self.end_date = str(current_date.date()).split('-')
-            self.end_date = [int(self.end_date[2]), int(self.end_date[1]), int(self.end_date[0])]
+            self._end_date = str(current_date.date()).split('-')
+            self._end_date = [int(self._end_date[2]), int(self._end_date[1]), int(self._end_date[0])]
         else:
-            self.end_date = [day, month, year]
+            self._end_date = [day, month, year]
 
     def get_end_date(self):
 
-        return self.end_date
+        return self._end_date
 
     # Polymorphism - Operator overloading
+    # Customising the behaviour of predefined operators or special methods when they are applied to instances of a class
     def __str__(self):
         return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nStart: '
-                f'{self.start_date}\nEnd: {self.end_date}')
+                f'{self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd: {self._end_date[0]}/'
+                f'{self._end_date[1]}/{self._end_date[2]}')
 
     # del method is called when an object is about to be destroyed
     def __del__(self):
@@ -65,6 +70,7 @@ class Book:
 
 
 # Inheritance - inherits Book class' attributes & methods
+# This is single inheritance, but there is also multiple inheritance, multi-level inheritance & hierarchical inheritance
 class Chapter(Book):
     # will directly pass arguments later to become attributes of the super class and subclass
     def __init__(self, title, author, genre, pages):
@@ -80,7 +86,8 @@ class Chapter(Book):
 
     def __str__(self):
         return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nPages: '
-                f'{self._pages_count}\nStart: {self.start_date}\nEnd: {self.end_date}')
+                f'{self._pages_count}\nStart: {self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd:'
+                f' {self._end_date[0]}/{self._end_date[1]}/{self._end_date[2]}')
 
     def add_pages(self, pages):
 
@@ -99,10 +106,38 @@ class Chapter(Book):
 
     def get_pages_info(self):
         _percentage = round((self.pages_finished/self._pages_count) * 100)
-        print(f'{self._book_title}: {_percentage}% finished\nPages finished: {self.pages_finished}/{self._pages_count}')
+        print(f'{self._book_title}: {_percentage}% Done\n{self.pages_finished}/{self._pages_count} pages finished')
 
 
 # Polymorphism - Duck typing - using a method interchangeably with another object
 def get_all_info(object_variable):
     info = object_variable.get_info()
     print(info)
+
+
+if __name__ == '__main__':
+    # Object 1
+    midnight_book = Book('The Midnight Library', 'Matt Haig', 'Fiction')
+
+    midnight_book.set_start_date(12, 5, 2023)
+
+    midnight_book.set_end_date(22, 8, 2023)
+
+    print(midnight_book, '\n')
+
+    # Object 2 ---------------------------------------------------------------------------------------------
+    britney_book = Chapter('The Woman in Me', 'Britney Spears', 'Memoir', 287)
+
+    britney_book.set_start_date(29, 9, 2023)
+
+    britney_book.set_end_date()
+
+    print(britney_book, '\n')
+
+    britney_book.add_pages(150)
+
+    britney_book.get_pages_info()
+
+    print('\n')
+    get_all_info(britney_book)
+    get_all_info(midnight_book)
