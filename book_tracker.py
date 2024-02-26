@@ -1,40 +1,18 @@
 from book_classes import Book
-from book_classes import Magazine
-from book_classes import get_all_info
+from book_classes import Chapter
 
 # Object 1
 dune_book = Book('Dune', 'Frank Herbert', 'Science Fiction')
-
-info = dune_book.get_info()
-
-print(info)
-
-dune_book.set_start_date()
-
-print(dune_book.get_start_date())
-
 # Object 2
-platform_book = Book('People on Platform 5', 'Clare Pooley', 'Fiction')
+platform_book = Chapter('People on Platform 5', 'Clare Pooley', 'Fiction', 384)
 
-info2 = platform_book.get_info()
+dune_book.set_start_date(12, 5, 2023)
+dune_book.set_end_date(22,8, 2023)
+print(dune_book, '\n')
 
-print(info2)
-
-platform_book.set_start_date('2023', '01', '25')
-
-start = platform_book.get_start_date()
-
+platform_book.set_start_date(29, 9, 2023)
 platform_book.set_end_date()
+print(platform_book, '\n')
 
-end = platform_book.get_end_date()
-
-# Object 3
-time_out = Magazine('Time Out', 'Time Out Group', 10)
-
-print(time_out.get_info())
-
-length = dune_book - platform_book
-
-print(length)
-
-get_all_info(dune_book)
+platform_book.add_pages(150)
+platform_book.get_pages_info()
