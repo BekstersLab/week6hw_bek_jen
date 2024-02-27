@@ -234,25 +234,37 @@ class PagesLevel(DatesLevel):
     def award_badge(self):
         # if self._end_date does not contain the value of None, execute this code
         if self._end_date is not None:
+
+            # returns a string about a badge award
             return f'You finished {self._book_title} - Here\'s a BOOK Badge!'
 
+        # else if self.__percentage is between the range of 25-51, execute this code
         elif self.__percentage in range(25, 51):
+
+            # returns a string about a bronze star award
             return f'You finished 1/4 of {self._book_title} so far! Here\'s a BRONZE Star!'
 
+        # else if self.__percentage is between the range of 50-76, execute this code
         elif self.__percentage in range(50, 76):
+
+            # returns a string about a silver star award
             return f'You finished 1/2 of {self._book_title} so far! Here\'s a SILVER Star!'
 
+        # else if self.__percentage value is above 75, execute this code
         else:
-
+            # returns a string about a gold star award
             return f'You finished 3/4 of {self._book_title}. So close! Here\'s a GOLD Star!'
 
+    # Polymorphism - Operator overloading
+    # Customising the behaviour of predefined operators or special methods when they are applied to instances of a class
     def __str__(self):
-
+        # Assigned the value of None to variable __end, a private variable
         __end = None
-
+        # if self._end_date does NOT contain the value of None, execute this code
         if self._end_date is not None:
             __end = '/'.join(self._end_date)
 
+        # returns a string containing info about the current instance with end date's value as 'None'
         return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nPages: '
                 f'{self._pages_count}\nStart: {self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd:'
                 f' {__end}\n{self.track_progress()}')
