@@ -1,10 +1,36 @@
-# Importing the datetime class from the datetime module
+# Simple Book Tracker for Kids
+
+# abc module helps you define an abstract base class (ABC)
+# An ABC is a class that is meant to be subclassed, but not instantiated directly
+# ABC defines a common interface that subclasses must follow by implementing certain methods
+from abc import ABC, abstractmethod
+
+# Importing the datetime class from the datetime module to create an instance in two methods
 from datetime import datetime
 
 
 # Class names always start with a capital letter
-# class declares a Book class
-class Book:
+# class statement defines a new class, BookTracker
+# ABC indicates this is an abstract class, defining a common interface that subclasses must implement
+class BookTracker(ABC):
+
+    # @abstractmethod decorator marks a method as abstract within an abstract base class
+    # @abstractmethod indicates subclasses must provide their own implementations of this method
+    # track_progress method should return current info about book reading progress, how each subclass uniquely tracks it
+    @abstractmethod
+    def track_progress(self):
+        # pass is a placeholder indicating that this method has no implementation in the ABC
+        pass
+
+    # award_badge method returns a string, awarding a badge, after a specific amount of reading progress is made.
+    @abstractmethod
+    def award_badge(self):
+        # pass is a placeholder indicating that this method has no implementation in the ABC
+        pass
+
+
+# class statement defines a book class
+class DatesLevel(BookTracker):
     # instance_count variable stores how many instances of the Book class exists
     instance_count = 0
 
@@ -15,23 +41,23 @@ class Book:
     # self is used to access variables and methods associated with the current instance
     def __init__(self, title, author, genre):
 
+        self._book_title = title
+        self._author_name = author
+        self._which_genre = genre
+        self._read_period = None
+        
         # accessing the book_title attribute of the current instance of the class
         # Encapsulation - restricting access to certain parts of the class
         # Encapsulation provides data protection and prevents direct manipulation of certain parts of the class
         # adding an _ to an attribute name means it is 'protected'
         # _ cannot be directly assigned a value, it has to be accessed through a method or subclasses
         # dunderscore means this is 'private' and should only be accessed within this class and not subclasses
-        self._book_title = title
-        self._author_name = author
-        self._which_genre = genre
 
         # Initially assigning None to these attributes so that their values can only be assigned through methods
         self._start_date = None
         self._end_date = None
-        self._read_length = None
-
         # accessing the instance_count variable of the Book class and adding 1 to its value
-        Book.instance_count += 1
+        DatesLevel.instance_count += 1
 
     # def declares the set_start_date method with 4 parameters, 3 parameters have the default value
     def set_start_date(self, day=None, month=None, year=None):
@@ -39,10 +65,11 @@ class Book:
         if None in [day, month, year]:
             # datetime is a class, now is a method
             current_date = datetime.now()
+            self._start_date = current_date.date()
             self._start_date = str(current_date.date()).split('-')
-            self._start_date = [int(self._start_date[2]), int(self._start_date[1]), int(self._start_date[0])]
+            self._start_date = [self._start_date[2], self._start_date[1], self._start_date[0]]
         else:
-            self._start_date = [day, month, year]
+            self._start_date = [str(day), str(month), str(year)]
 
     def get_start_date(self):
 
@@ -52,43 +79,61 @@ class Book:
         if None in [day, month, year]:
             current_date = datetime.now()
             self._end_date = str(current_date.date()).split('-')
-            self._end_date = [int(self._end_date[2]), int(self._end_date[1]), int(self._end_date[0])]
+            self._end_date = [self._end_date[2], self._end_date[1], self._end_date[0]]
         else:
-            self._end_date = [day, month, year]
+            self._end_date = [str(day), str(month), str(year)]
 
     def get_end_date(self):
 
         return self._end_date
 
+    def track_progress(self):
+
+        if self._end_date is None:
+            return 'Book is not yet finished'
+
+        else:
+            # Instantiated 2 objects of the datetime class
+            __start_date = datetime(int(self._start_date[2]), int(self._start_date[1]), int(self._start_date[0]))
+            __end_date = datetime(int(self._end_date[2]), int(self._end_date[1]), int(self._end_date[0]))
+            self._read_period = (__end_date - __start_date).days
+
+            return f'Finished reading in {self._read_period} days'
+
+    def award_badge(self):
+        if self._end_date is not None:
+            return f'You finished {self._book_title} - Here\'s a BOOK Badge!'
+
     # Polymorphism - Operator overloading
     # Customising the behaviour of predefined operators or special methods when they are applied to instances of a class
     def __str__(self):
-        if self._end_date is None:
 
-            return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nStart: '
-                    f'{self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd: {self._end_date}')
+        __end = None
 
-        else:
+        if self._end_date is not None:
 
-            return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nStart: '
-                    f'{self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd: {self._end_date[0]}/'
-                    f'{self._end_date[1]}/{self._end_date[2]}')
+            __end = '/'.join(self._end_date)
+
+        return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nStart: '
+                f'{self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd: {__end}\n'
+                f'{self.track_progress()}')
 
     # del method is called when an object is about to be destroyed
     def __del__(self):
         # accessing the instance_count variable of the Book class and subtracting 1 from its value
-        Book.instance_count -= 1
+        DatesLevel.instance_count -= 1
 
 
 # SUB CLASS ------------------------------------------------------------------------------------------------------------
 # Inheritance - inherits Book class' attributes & methods
 # This is single inheritance, but there is also multiple inheritance, multi-level inheritance & hierarchical inheritance
-class Chapter(Book):
+class PagesLevel(DatesLevel):
     # will directly pass arguments later to become attributes of the super class and subclass
     def __init__(self, title, author, genre, pages):
         super().__init__(title, author, genre)
         self._pages_count = pages
         self.pages_finished = 0
+        self.__percentage = 0
 
     # Polymorphism - method overriding
     def set_end_date(self, day=None, month=None, year=None):
@@ -97,14 +142,9 @@ class Chapter(Book):
         if None in [day, month, year]:
             current_date = datetime.now()
             self._end_date = str(current_date.date()).split('-')
-            self._end_date = [int(self._end_date[2]), int(self._end_date[1]), int(self._end_date[0])]
+            self._end_date = [self._end_date[2], self._end_date[1], self._end_date[0]]
         else:
             self._end_date = [day, month, year]
-
-    # def get_info(self):
-    #     __info = {'Title': self._book_title, 'Author': self._author_name, 'Genre': self._which_genre,
-    #               'Pages': self._pages_count}
-    #     return __info
 
     def set_pages(self, pages):
 
@@ -114,29 +154,41 @@ class Chapter(Book):
         else:
             self.pages_finished = pages
 
-    def get_pages_info(self):
-        _percentage = round((self.pages_finished/self._pages_count) * 100)
-        print(f'{self._book_title}: {_percentage}% Done\n{self.pages_finished}/{self._pages_count} pages finished')
+    def track_progress(self):
+        self.__percentage = round((self.pages_finished / self._pages_count) * 100)
+        return f'{self._book_title}: {self.__percentage}% Done\n{self.pages_finished}/{self._pages_count} pages finished'
 
-    def __str__(self):
+    def award_badge(self):
+        if self._end_date is not None:
+            return f'You finished {self._book_title} - Here\'s a BOOK Badge!'
 
-        if self._end_date is None:
+        elif self.__percentage in range(25,51):
+            return f'You finished 1/4 of {self._book_title} so far! Here\'s a BRONZE Star!'
 
-            return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nPages: '
-                    f'{self._pages_count}\nStart: {self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\n'
-                    f'End: {self._end_date}')
+        elif self.__percentage in range(50,76):
+            return f'You finished 1/2 of {self._book_title} so far! Here\'s a SILVER Star!'
 
         else:
 
-            return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nPages: '
-                    f'{self._pages_count}\nStart: {self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd:'
-                    f' {self._end_date[0]}/{self._end_date[1]}/{self._end_date[2]}')
+            return f'You finished 3/4 of {self._book_title}. So close! Here\'s a GOLD Star!'
+
+
+    def __str__(self):
+
+        __end = None
+
+        if self._end_date is not None:
+            __end = '/'.join(self._end_date)
+
+        return (f'Book Title: {self._book_title}\nAuthor: {self._author_name}\nGenre: {self._which_genre}\nPages: '
+                f'{self._pages_count}\nStart: {self._start_date[0]}/{self._start_date[1]}/{self._start_date[2]}\nEnd:'
+                f' {__end}\n{self.track_progress()}')
 
 
 if __name__ == '__main__':
-    # OBJECT 1 - TESTING DATES & OBJECT INSTANTIATION
+    # OBJECT 1 - TESTING DATES & OBJECT INSTANTIATION ------------------------------------------------------------------
     # Passing string arguments to become attributes & instantiating the midnight_book object of the Book class
-    midnight_book = Book('The Midnight Library', 'Matt Haig', 'Fiction')
+    midnight_book = DatesLevel('The Midnight Library', 'Matt Haig', 'Fiction')
 
     # Invoking the set_start_date method of the Book class, setting a date for when the book started
     # date is stored in the _start_date attribute of the midnight_book object
@@ -149,16 +201,19 @@ if __name__ == '__main__':
     print(midnight_book, '\n')
 
     # OBJECT 2 - TESTING PAGES -----------------------------------------------------------------------------------------
-    britney_book = Chapter('The Woman in Me', 'Britney Spears', 'Memoir', 287)
+    britney_book = PagesLevel('The Woman in Me', 'Britney Spears', 'Memoir', 287)
 
     britney_book.set_start_date(29, 9, 2023)
 
-    print(britney_book, '\n')
     britney_book.set_pages(100)
-    britney_book.get_pages_info()
-    print('\n')
-    britney_book.set_pages(25)
-    britney_book.get_pages_info()
+    print(britney_book, '\n')
+
+    # BOOK TRACKING & AWARDS
+    print(midnight_book.track_progress(), '\n')
+    print(britney_book.track_progress(), '\n')
+
+    print(midnight_book.award_badge())
+    print(britney_book.award_badge())
 
     # DUCK TYPING ------------------------------------------------------------------------------------------------------
     # Polymorphism - Duck typing - using a method interchangeably with another object
