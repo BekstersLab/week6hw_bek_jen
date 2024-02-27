@@ -11,8 +11,8 @@ dune_book.set_end_date(22,8, 2023)
 print(dune_book, '\n')
 
 platform_book.set_start_date(29, 9, 2023)
-platform_book.set_end_date()
-print(platform_book, '\n')
 
-platform_book.add_pages(150)
+platform_book.set_pages(150)
 platform_book.get_pages_info()
+
+print(platform_book, '\n')
